@@ -4,6 +4,9 @@ enum MemoryType {
 
 class Memory {
   final MemoryType type;
+  final String id;
+  final DateTime memoryDate;
+  final String data;
 
-  Memory(this.type);
+  Memory({this.type, this.id, this.data, this.memoryDate});
 }
