@@ -1,5 +1,15 @@
 enum MemoryType {
-  Text, Image, Audio, Website
+  Text, Image, Video, Audio, Website
+}
+
+const months = [
+  "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP",
+  "AUG", "NOV", "DEC"
+];
+
+String zeroPad(x) {
+  var str = x.toString();
+  return str.length > 1 ? str : '0' + str;
 }
 
 class Memory {
@@ -9,4 +19,13 @@ class Memory {
   final String data;
 
   Memory({this.type, this.id, this.data, this.memoryDate});
+
+  String getDateString() {
+    var month = months[memoryDate.month - 1];
+    var day = zeroPad(memoryDate.day);
+    var hour = zeroPad(memoryDate.hour);
+    var minute = zeroPad(memoryDate.minute);
+
+    return "$hour:$minute on $month $day, ${memoryDate.year}";
+  }
 }

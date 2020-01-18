@@ -49,7 +49,7 @@ class _CollectionDetailComponentState extends State<CollectionDetailComponent> {
     return Dismissible(
       background: Container(color: Colors.red),
       child: memory,
-      key: Key('i'),
+      key: Key(memory.memory.id),
       onDismissed: (_) => delete(memory.memory),
       confirmDismiss: confirmDelete,
       direction: DismissDirection.endToStart,
@@ -108,7 +108,7 @@ class _CollectionDetailComponentState extends State<CollectionDetailComponent> {
               ),
               child: ListView(
                 children: makeMemories(),
-                padding: EdgeInsets.only(top: 5),
+                padding: EdgeInsets.only(top: 10),
               ),
             ),
           ),

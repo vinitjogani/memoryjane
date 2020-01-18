@@ -34,15 +34,15 @@ class MemoryComponent extends StatelessWidget {
   }
 
   Widget displayMemory({var x = false}) {
-    if (Random().nextInt(2) < 1) {
+    if (memory.type == MemoryType.Text) {
       return Text(
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        memory.data,
         softWrap: true,
         style: TextStyle(fontSize: 17),
       );
     }
-    else {
-      return Image.network("https://api.time.com/wp-content/uploads/2020/01/SnowAngel.jpg?w=600&quality=85");
+    else if (memory.type == MemoryType.Image) {
+      return Image.network(memory.data);
     }
   }
 
@@ -62,7 +62,7 @@ class MemoryComponent extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        "MAY 06, 2017",
+                        memory.getDateString(),
                         softWrap: true,
                         style: TextStyle(
                           fontSize: 12,

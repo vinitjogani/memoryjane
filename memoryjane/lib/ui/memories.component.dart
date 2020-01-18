@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
+import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/ui/group.component.dart';
 import 'package:memoryjane/signin_auth.dart';
 import 'package:memoryjane/sign_in.dart';
@@ -24,7 +25,9 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     Collection(
         name: "Sriram",
         coverImageUrl: "https://avatars0.githubusercontent.com/u/15956660?s=460&v=4",
-        memories: []
+        memories: [
+          Memory(type: MemoryType.Text, data: "Hello, world!", id: "123", memoryDate: DateTime(2020, 1, 7, 3, 33))
+        ]
     ),
     Collection(
       name: "Steven",
