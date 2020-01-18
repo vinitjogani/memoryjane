@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "15487344097",
+    "firebase_url": "https://memory-jane-43c82.firebaseio.com",
+    "project_id": "memory-jane-43c82",
+    "storage_bucket": "memory-jane-43c82.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15487344097:android:6587762d193868b22a46a0",
+        "android_client_info": {
+          "package_name": "com.poseidon.memoryjane"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15487344097-8voigcgd2lf37c0d3k597rndcihmhvel.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUjuS91aVD_uh9NAj-1ZddWKgd0_74cO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15487344097-8voigcgd2lf37c0d3k597rndcihmhvel.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
