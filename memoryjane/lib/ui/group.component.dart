@@ -26,7 +26,8 @@ class GroupComponent extends StatelessWidget {
           border: Border(
             top: BorderSide(color: Colors.grey[400]),
             bottom: BorderSide(color: Colors.grey[400]),
-          )
+          ),
+        color: Colors.white
       ),
       child: Column(
         children: <Widget>[
