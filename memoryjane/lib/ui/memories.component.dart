@@ -3,7 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/ui/group.component.dart';
+import 'package:memoryjane/signin_auth.dart';
+import 'package:memoryjane/sign_in.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+
+// TODO: signin_auth has name and email variable from signing in. Can be used for database updates and UI customization
+//String name;
+//String email;
+
 
 class MemoriesComponent extends StatefulWidget {
 
@@ -12,7 +19,6 @@ class MemoriesComponent extends StatefulWidget {
 }
 
 class _MemoriesComponentState extends State<MemoriesComponent> {
-
 
   final List<Collection> dummyCollections = [
     Collection(
@@ -55,6 +61,29 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Test'),
+        actions: <Widget>[
+          RaisedButton(
+            onPressed: () {
+              signOutGoogle();
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {return LoginPage();}), ModalRoute.withName('/'));
+            },
+            color: Colors.blueGrey,
+
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Text(
+                'Sign Out',
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+            ),
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40))
+          )
+        ],
+      ),
       backgroundColor: Colors.grey[200],
       body: ListView(
         children: <Widget>[
@@ -81,3 +110,4 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   }
 
 }
+

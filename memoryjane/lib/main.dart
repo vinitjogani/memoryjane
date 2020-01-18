@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memoryjane/ui/memories.component.dart';
+import 'sign_in.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MemoriesComponent(),
+      home: LoginPage(),
     );
   }
 }

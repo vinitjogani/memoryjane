@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "15487344097-qtd1kuhbe1l3rj9hsv6eoll1uhr5fg69.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.poseidon.memoryjane",
+            "certificate_hash": "94856e325f43b55b208b8eec1faaa42938aacc0b"
+          }
+        },
+        {
           "client_id": "15487344097-8voigcgd2lf37c0d3k597rndcihmhvel.apps.googleusercontent.com",
           "client_type": 3
         }
