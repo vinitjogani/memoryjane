@@ -3,17 +3,17 @@ import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/ui/memory.component.dart';
 
-class DetailComponent extends StatefulWidget {
+class CollectionDetailComponent extends StatefulWidget {
 
   final Collection collection;
 
-  DetailComponent(this.collection);
+  CollectionDetailComponent(this.collection);
 
   @override
-  _DetailComponentState createState() => _DetailComponentState();
+  _CollectionDetailComponentState createState() => _CollectionDetailComponentState();
 }
 
-class _DetailComponentState extends State<DetailComponent> {
+class _CollectionDetailComponentState extends State<CollectionDetailComponent> {
   bool confirm = false;
 
   Future<bool> confirmDelete(_) async {

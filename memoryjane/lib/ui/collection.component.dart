@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
-import 'package:memoryjane/ui/detail.component.dart';
+import 'package:memoryjane/ui/collection_detail.component.dart';
 
 class CollectionComponent extends StatelessWidget {
   final Collection collection;
@@ -18,7 +18,7 @@ class CollectionComponent extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           var route = MaterialPageRoute(
-            builder: (context) => DetailComponent(this.collection),
+            builder: (context) => CollectionDetailComponent(this.collection),
           );
           Navigator.push(context, route);
         },
