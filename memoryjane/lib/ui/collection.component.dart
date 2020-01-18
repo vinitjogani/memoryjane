@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
+import 'package:memoryjane/ui/detail.component.dart';
 
 class CollectionComponent extends StatelessWidget {
   final Collection collection;
@@ -14,47 +15,55 @@ class CollectionComponent extends StatelessWidget {
         top: 15,
         bottom: 15,
       ),
-      child: Container(
-        child: Stack(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                collection.name,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w600
+      child: GestureDetector(
+        onTap: () {
+          var route = MaterialPageRoute(
+            builder: (context) => DetailComponent(this.collection),
+          );
+          Navigator.push(context, route);
+        },
+        child: Container(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.all(Radius.circular(25)),
                 ),
               ),
-            )
-          ],
-          alignment: Alignment.bottomLeft,
-        ),
-        width: 250,
-        height: 200,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(collection.coverImage),
-              fit: BoxFit.cover
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  collection.name,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w600
+                  ),
+                ),
+              )
+            ],
+            alignment: Alignment.bottomLeft,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.grey[800],
-              offset: Offset(5, 5),
-              blurRadius: 15,
-              spreadRadius: 2,
+          width: 250,
+          height: 200,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(collection.coverImage),
+                fit: BoxFit.cover
             ),
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.grey[800],
+                offset: Offset(5, 5),
+                blurRadius: 15,
+                spreadRadius: 2,
+              ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );

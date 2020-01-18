@@ -5,9 +5,10 @@ import 'package:memoryjane/ui/collection.component.dart';
 
 class GroupComponent extends StatelessWidget {
 
+  final String name;
   final List<Collection> collections;
 
-  GroupComponent(this.collections);
+  GroupComponent(this.name, this.collections);
 
   List<Widget> buildListView() {
     List<Widget> output = [];
@@ -32,7 +33,7 @@ class GroupComponent extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 40, top: 15,),
             child: Text(
-              "PEOPLE",
+              name,
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Raleway'
