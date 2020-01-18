@@ -33,7 +33,6 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     ),
     Collection(
       name: "Steven",
-      coverImageUrl: "https://media-exp2.licdn.com/dms/image/C5103AQEEE_HkW-K6XA/profile-displayphoto-shrink_800_800/0?e=1584576000&v=beta&t=a-imVGOhEkrG0u5zitHzrdXMP7M5Z7D9lMJ_mbNY0hY",
       memories: []
     ),
   ];
