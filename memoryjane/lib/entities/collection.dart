@@ -7,4 +7,8 @@ class Collection {
   final List<Memory> memories;
 
   Collection({this.id, this.name, this.coverImageUrl, this.memories});
+
+  String getCoverImage() {
+    return coverImageUrl;
+  }
 }

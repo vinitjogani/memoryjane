@@ -50,7 +50,7 @@ class CollectionComponent extends StatelessWidget {
           height: 200,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(collection.coverImage),
+                image: NetworkImage(collection.getCoverImage()),
                 fit: BoxFit.cover
             ),
             borderRadius: BorderRadius.all(Radius.circular(25)),

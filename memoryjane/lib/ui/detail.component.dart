@@ -59,10 +59,14 @@ class _DetailComponentState extends State<DetailComponent> {
   List<Widget> makeMemories() {
     List<Widget> output = [];
     var memories = widget.collection.memories;
-    for (var memory in memories.sublist(0, memories.length - 2)) {
-      output.add(makeDismissible(MemoryComponent(memory)));
+    if (memories.length > 1) {
+      for (var memory in memories.sublist(0, memories.length - 1)) {
+        output.add(makeDismissible(MemoryComponent(memory)));
+      }
     }
-    output.add(makeDismissible(MemoryComponent(memories.last, last: true)));
+    if (memories.length > 0) {
+      output.add(makeDismissible(MemoryComponent(memories.last, last: true)));
+    }
     return output;
   }
 

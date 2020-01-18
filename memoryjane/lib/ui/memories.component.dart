@@ -23,12 +23,12 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   final List<Collection> dummyCollections = [
     Collection(
         name: "Sriram",
-        coverImage: "https://avatars0.githubusercontent.com/u/15956660?s=460&v=4",
+        coverImageUrl: "https://avatars0.githubusercontent.com/u/15956660?s=460&v=4",
         memories: []
     ),
     Collection(
       name: "Steven",
-      coverImage: "https://media-exp2.licdn.com/dms/image/C5103AQEEE_HkW-K6XA/profile-displayphoto-shrink_800_800/0?e=1584576000&v=beta&t=a-imVGOhEkrG0u5zitHzrdXMP7M5Z7D9lMJ_mbNY0hY",
+      coverImageUrl: "https://media-exp2.licdn.com/dms/image/C5103AQEEE_HkW-K6XA/profile-displayphoto-shrink_800_800/0?e=1584576000&v=beta&t=a-imVGOhEkrG0u5zitHzrdXMP7M5Z7D9lMJ_mbNY0hY",
       memories: []
     ),
   ];
