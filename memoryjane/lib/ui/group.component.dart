@@ -24,7 +24,6 @@ class GroupComponent extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: Colors.grey[400]),
             bottom: BorderSide(color: Colors.grey[400]),
           ),
         color: Colors.white

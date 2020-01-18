@@ -1,12 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
+import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/ui/memory.component.dart';
 
-class DetailComponent extends StatelessWidget {
+class DetailComponent extends StatefulWidget {
 
   final Collection collection;
 
   DetailComponent(this.collection);
+
+  @override
+  _DetailComponentState createState() => _DetailComponentState();
+}
+
+class _DetailComponentState extends State<DetailComponent> {
+  bool confirm = false;
+
+  Future<bool> confirmDelete(_) async {
+    setState(() { confirm = false; });
+    await showDialog( builder: (context) => AlertDialog(
+      title: Text('Are you sure?'),
+      content: const Text('This will permanently and irreversibly delete this memory.'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Yes'),
+          onPressed: () {
+            setState(() { confirm = true; });
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: Text('No'),
+          onPressed: () {
+            setState(() { confirm = false; });
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    ), context: context);
+    return confirm;
+  }
+
+  void delete(Memory item) {
+
+  }
+
+  Widget makeDismissible(MemoryComponent memory) {
+    return Dismissible(
+      background: Container(color: Colors.red),
+      child: memory,
+      key: Key('i'),
+      onDismissed: (_) => delete(memory.memory),
+      confirmDismiss: confirmDelete,
+      direction: DismissDirection.endToStart,
+    );
+  }
+
+  List<Widget> makeMemories() {
+    List<Widget> output = [];
+    var memories = widget.collection.memories;
+    for (var memory in memories.sublist(0, memories.length - 2)) {
+      output.add(makeDismissible(MemoryComponent(memory)));
+    }
+    output.add(makeDismissible(MemoryComponent(memories.last, last: true)));
+    return output;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,22 +72,20 @@ class DetailComponent extends StatelessWidget {
       backgroundColor: Colors.grey[200],
       body: Column(
         children: <Widget>[
-          SizedBox(height: 15,),
+          SizedBox(height: 20,),
           Row(
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.close, color: Colors.black,),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context)
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.end,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 5),
+            padding: const EdgeInsets.only(left: 10.0, top: 0),
             child: Text(
-              collection.name,
+              widget.collection.name,
               style: TextStyle(
                   fontSize: 50,
                   fontFamily: 'Raleway',
@@ -47,12 +103,8 @@ class DetailComponent extends StatelessWidget {
                 )
               ),
               child: ListView(
-                children: <Widget>[
-                  MemoryComponent(),
-                  MemoryComponent(),
-                  MemoryComponent(),
-                  MemoryComponent(last: true),
-                ],
+                children: makeMemories(),
+                padding: EdgeInsets.only(top: 5),
               ),
             ),
           ),

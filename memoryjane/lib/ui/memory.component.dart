@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:memoryjane/entities/memory.dart';
 
 class MemoryComponent extends StatelessWidget {
 
+  final Memory memory;
   final bool last;
 
-  MemoryComponent({this.last = false});
+  MemoryComponent(this.memory, {this.last = false});
 
   Widget buildTimelineVisual() {
     var widgets = <Widget>[

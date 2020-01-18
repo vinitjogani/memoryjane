@@ -58,53 +58,60 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     ReceiveSharingIntent.getInitialText().then(textCallback);
   }
 
+  void signout() {
+    signOutGoogle();
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {return LoginPage();}), ModalRoute.withName('/'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Test'),
-        actions: <Widget>[
-          RaisedButton(
-            onPressed: () {
-              signOutGoogle();
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {return LoginPage();}), ModalRoute.withName('/'));
-            },
-            color: Colors.blueGrey,
 
-            child: Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: Text(
-                'Sign Out',
-                style: TextStyle(fontSize: 15, color: Colors.white),
-              ),
-            ),
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40))
-          )
-        ],
-      ),
       backgroundColor: Colors.grey[200],
-      body: ListView(
+      body: Column(
         children: <Widget>[
-          SizedBox(height: 50,),
+          SizedBox(height: 20,),
+          Row(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.exit_to_app, color: Colors.black,),
+                onPressed: signout
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.end,
+          ),
           Padding(
-            padding: const EdgeInsets.only(left: 10.0),
+            padding: const EdgeInsets.only(left: 10.0, top: 0),
             child: Text(
               "Memories",
               style: TextStyle(
-                fontSize: 50,
-                fontFamily: 'Raleway',
-                fontWeight: FontWeight.w800
+                  fontSize: 50,
+                  fontFamily: 'Raleway',
+                  fontWeight: FontWeight.w800
               ),
             ),
           ),
-          SizedBox(height: 20,),
-          GroupComponent('PEOPLE', dummyCollections),
-          GroupComponent('PLACES', dummyCollections),
-          GroupComponent('TIME', dummyCollections),
-          SizedBox(height: 40,)
+          SizedBox(height: 20),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: Colors.grey[400]),
+                )
+              ),
+              child: ListView(
+                children: <Widget>[
+                  GroupComponent('PEOPLE', dummyCollections),
+                  GroupComponent('PLACES', dummyCollections),
+                  GroupComponent('TIME', dummyCollections),
+                  SizedBox(height: 40,)
+                ],
+                padding: EdgeInsets.all(0),
+              ),
+            ),
+          ),
         ],
+        crossAxisAlignment: CrossAxisAlignment.start,
       ),
     );
   }
