@@ -1,7 +1,31 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/memory.dart';
+
+
+Widget displayMemory(Memory memory) {
+  if (memory.type == MemoryType.Text) {
+    return Text(
+      memory.data,
+      softWrap: true,
+      style: TextStyle(fontSize: 17),
+    );
+  }
+  else if (memory.type == MemoryType.Image) {
+    if (memory.data.startsWith('http'))
+      return Image.network(memory.data);
+    else
+      return Image.file(File.fromUri(Uri(path: memory.data)));
+  }
+  return Text(
+    "This type of memory is not supported yet.",
+    softWrap: true,
+    style: TextStyle(fontSize: 17),
+  );
+}
+
 
 class MemoryComponent extends StatelessWidget {
 
@@ -33,19 +57,6 @@ class MemoryComponent extends StatelessWidget {
     );
   }
 
-  Widget displayMemory({var x = false}) {
-    if (memory.type == MemoryType.Text) {
-      return Text(
-        memory.data,
-        softWrap: true,
-        style: TextStyle(fontSize: 17),
-      );
-    }
-    else if (memory.type == MemoryType.Image) {
-      return Image.network(memory.data);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
@@ -58,7 +69,7 @@ class MemoryComponent extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 8.0, right: 20.0),
                 child: Column(
                   children: <Widget>[
-                    displayMemory(),
+                    displayMemory(memory),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(

@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/entities/memory.dart';
+import 'package:memoryjane/ui/create.component.dart';
 import 'package:memoryjane/ui/group.component.dart';
 import 'package:memoryjane/signin_auth.dart';
 import 'package:memoryjane/sign_in.dart';
+import 'package:memoryjane/ui/layout.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // TODO: signin_auth has name and email variable from signing in. Can be used for database updates and UI customization
@@ -37,11 +39,24 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   ];
 
   void mediaCallback(List<SharedMediaFile> value) {
-    print("Shared:" + (value?.map((f)=> f.path)?.join(",") ?? ""));
+    if (value != null && value.length  > 0) {
+      for (var m in value) {
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) =>
+                CreateComponent(Memory(data: m.path, type: MemoryType.Image))
+        ));
+      }
+      print("Shared:" + (value?.map((f)=> f.path)?.join(",") ?? ""));
+    }
   }
 
-  void textCallback(String value) {
-      print(value);
+  void textCallback(String value) async {
+    if (value == null) return;
+    print(value);
+
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => CreateComponent(Memory(data: value, type: MemoryType.Text))
+    ));
   }
 
   @override
@@ -61,60 +76,27 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     ReceiveSharingIntent.getInitialText().then(textCallback);
   }
 
-  void signout() {
+  void signOut() {
     signOutGoogle();
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {return LoginPage();}), ModalRoute.withName('/'));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-      backgroundColor: Colors.grey[200],
-      body: Column(
+    return LayoutComponent(
+      child: ListView(
         children: <Widget>[
-          SizedBox(height: 20,),
-          Row(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.exit_to_app, color: Colors.black,),
-                onPressed: signout
-              ),
-            ],
-            mainAxisAlignment: MainAxisAlignment.end,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 0),
-            child: Text(
-              "Memories",
-              style: TextStyle(
-                  fontSize: 50,
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w800
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.grey[400]),
-                )
-              ),
-              child: ListView(
-                children: <Widget>[
-                  GroupComponent('PEOPLE', dummyCollections),
-                  GroupComponent('PLACES', dummyCollections),
-                  GroupComponent('TIME', dummyCollections),
-                  SizedBox(height: 40,)
-                ],
-                padding: EdgeInsets.all(0),
-              ),
-            ),
-          ),
+          GroupComponent('PEOPLE', dummyCollections),
+          GroupComponent('PLACES', dummyCollections),
+          GroupComponent('TIME', dummyCollections),
+          SizedBox(height: 40,)
         ],
-        crossAxisAlignment: CrossAxisAlignment.start,
+        padding: EdgeInsets.all(0),
+      ),
+      title: "Memories",
+      action: IconButton(
+          icon: Icon(Icons.exit_to_app, color: Colors.black,),
+          onPressed: signOut
       ),
     );
   }
