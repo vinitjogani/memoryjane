@@ -1,8 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/ui/group.component.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-class MemoriesComponent extends StatelessWidget {
+class MemoriesComponent extends StatefulWidget {
+
+  @override
+  _MemoriesComponentState createState() => _MemoriesComponentState();
+}
+
+class _MemoriesComponentState extends State<MemoriesComponent> {
+
 
   final List<Collection> dummyCollections = [
     Collection(
@@ -17,9 +27,35 @@ class MemoriesComponent extends StatelessWidget {
     ),
   ];
 
+  void mediaCallback(List<SharedMediaFile> value) {
+    print("Shared:" + (value?.map((f)=> f.path)?.join(",") ?? ""));
+  }
+
+  void textCallback(String value) {
+      print(value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // For sharing images coming from outside the app while the app is in the memory
+    ReceiveSharingIntent.getMediaStream().listen(mediaCallback);
+
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then(mediaCallback);
+
+    // For sharing or opening urls/text coming from outside the app while the app is in the memory
+    ReceiveSharingIntent.getTextStream().listen(textCallback);
+
+    // For sharing or opening urls/text coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialText().then(textCallback);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: ListView(
         children: <Widget>[
           SizedBox(height: 50,),
@@ -43,4 +79,5 @@ class MemoriesComponent extends StatelessWidget {
       ),
     );
   }
+
 }
