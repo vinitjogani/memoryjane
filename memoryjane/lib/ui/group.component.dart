@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:memoryjane/entities/collection.dart';
@@ -7,13 +8,14 @@ class GroupComponent extends StatelessWidget {
 
   final String name;
   final List<Collection> collections;
+  final AsyncCallback refresh;
 
-  GroupComponent(this.name, this.collections);
+  GroupComponent(this.name, this.collections, this.refresh);
 
   List<Widget> buildListView() {
     List<Widget> output = [];
     for (var c in collections) {
-      output.add(CollectionComponent(c));
+      output.add(CollectionComponent(c, refresh));
     }
     output.add(SizedBox(width: 20,));
     return output;

@@ -115,7 +115,7 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
 
     Navigator.push(context, MaterialPageRoute(
       builder: (context) => CreateComponent(Memory(data: value, type: memType))
-    ));
+    )).then((_) => downloadCollections());
   }
 
   Future<FirebaseUser> _handleSignIn() async {
@@ -181,8 +181,8 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     return LayoutComponent(
       child: ListView(
         children: <Widget>[
-          GroupComponent('PEOPLE', personCollections),
-          GroupComponent('TIME', timeCollections),
+          GroupComponent('PEOPLE', personCollections, downloadCollections),
+          GroupComponent('TIME', timeCollections, downloadCollections),
           SizedBox(height: 40,)
         ],
         padding: EdgeInsets.all(0),

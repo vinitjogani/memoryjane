@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/ui/collection_detail.component.dart';
 
 class CollectionComponent extends StatelessWidget {
   final Collection collection;
+  final AsyncCallback refresh;
 
-  CollectionComponent(this.collection);
+  CollectionComponent(this.collection, this.refresh);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class CollectionComponent extends StatelessWidget {
           var route = MaterialPageRoute(
             builder: (context) => CollectionDetailComponent(this.collection),
           );
-          Navigator.push(context, route);
+          Navigator.push(context, route).then((_) => refresh());
         },
         child: Container(
           child: Stack(
