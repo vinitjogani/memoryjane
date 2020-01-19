@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/entities/memory.dart';
@@ -46,7 +47,7 @@ class _CollectionDetailComponentState extends State<CollectionDetailComponent> {
   Future delete(Memory item) async {
     widget.collection.memories.remove(item);
     print("Removing ${item.id} from ${widget.collection.name}");
-    await Firestore.instance.collection('vnjogani@gmail.com')
+    await Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
       .document('Collections').collection(widget.collection.name.toLowerCase())
       .document(item.id).delete();
   }

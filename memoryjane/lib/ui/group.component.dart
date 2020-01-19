@@ -21,6 +21,17 @@ class GroupComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (collections.length == 0 && name != "PEOPLE")
+      return Text("");
+
+    if (collections.length == 0)
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Text("Nothing here yet! Share to MJ to save memories.")
+        ),
+      );
+
     return Container(
       decoration: BoxDecoration(
           border: Border(

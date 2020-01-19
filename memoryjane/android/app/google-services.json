@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "15487344097-oppakq91ipecrtcbpfr8akig0kod46sc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.poseidon.memoryjane",
+            "certificate_hash": "e2748e7eb8ea7d28ec28026b0e194462db418580"
+          }
+        },
+        {
           "client_id": "15487344097-qtd1kuhbe1l3rj9hsv6eoll1uhr5fg69.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +46,13 @@
             {
               "client_id": "15487344097-8voigcgd2lf37c0d3k597rndcihmhvel.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "15487344097-sbi4959re7pool4hqdbk9729qqlqsbsc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.poseidon.memoryjane"
+              }
             }
           ]
         }

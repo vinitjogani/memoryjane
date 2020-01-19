@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/ui/create.component.dart';
@@ -45,6 +47,8 @@ class MemoriesComponent extends StatefulWidget {
 
 class _MemoriesComponentState extends State<MemoriesComponent> {
 
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   List<Collection> personCollections = [];
   List<Collection> timeCollections = [];
 
@@ -63,12 +67,14 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     }
   }
 
-  void downloadCollections() async {
+  Future downloadCollections() async {
+    print("Downloading...");
+    
     Map<String, List<Memory>> memoryMonthMap = {};
     List<Collection> personCols = [], timeCols = [];
-    var colDocs = await Firestore.instance.collection("vnjogani@gmail.com")
+    var colDocs = await Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
         .document('Collections').collection('List').getDocuments();
-    var endpoint = Firestore.instance.collection("vnjogani@gmail.com")
+    var endpoint = Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
         .document('Collections');
 
     for(var doc in colDocs.documents) {
@@ -111,6 +117,26 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     ));
   }
 
+  Future<FirebaseUser> _handleSignIn() async {
+    var u = await _auth.currentUser();
+
+    if (u == null) {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth = await googleUser
+          .authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      u = (await _auth.signInWithCredential(credential)).user;
+      print("signed in " + u.displayName);
+    }
+
+    return u;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -127,9 +153,12 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then(textCallback);
 
-    downloadCollections();
 
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: downloadCollections));
+
+    _handleSignIn().then((_) {
+      downloadCollections();
+    });
   }
 
   void signOut() {
