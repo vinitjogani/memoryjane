@@ -5,8 +5,9 @@ class LayoutComponent extends StatelessWidget {
   final IconButton action;
   final String title;
   final Widget child;
+  final FloatingActionButton fab;
 
-  LayoutComponent({this.child, this.title, this.action});
+  LayoutComponent({this.child, this.title, this.action, this.fab});
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,7 @@ class LayoutComponent extends StatelessWidget {
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
       ),
+      floatingActionButton: fab,
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/ui/create.component.dart';
+import 'package:memoryjane/ui/create_text_memory.component.dart';
 import 'package:memoryjane/ui/group.component.dart';
 import 'package:memoryjane/signin_auth.dart';
 import 'package:memoryjane/sign_in.dart';
@@ -108,6 +109,13 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {return LoginPage();}), ModalRoute.withName('/'));
   }
 
+  void createTextMemory() {
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) =>
+            CreateTextMemoryComponent()
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     downloadCollections();
@@ -125,6 +133,11 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
           icon: Icon(Icons.exit_to_app, color: Colors.black,),
           onPressed: signOut
       ),
+      fab: FloatingActionButton(
+        child: Icon(Icons.keyboard, color: Colors.white),
+        onPressed: createTextMemory,
+        backgroundColor: Colors.black87,
+      )
     );
   }
 
