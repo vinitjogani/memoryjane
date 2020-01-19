@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/ui/layout.dart';
 import 'package:memoryjane/ui/memory.component.dart';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_tags/tag.dart';
 
 
@@ -41,35 +39,38 @@ class _CreateComponentState extends State<CreateComponent> {
 
   Future<String> uploadImage(String path) async {
     print("Uploading");
-    // TODO: Upload image and return url
-    final StorageReference storageReference = FirebaseStorage().ref().child("Test");
-    final StorageUploadTask uploadTask = storageReference.putFile(File.fromUri(Uri(path: path)));
+    final StorageReference storageReference = FirebaseStorage().ref().child(
+        "Test");
+    final StorageUploadTask uploadTask = storageReference.putFile(
+        File.fromUri(Uri(path: path)));
     await uploadTask.onComplete;
 
     String imageURL = await storageReference.getDownloadURL();
+    print(imageURL);
     return imageURL;
   }
 
-  Future<Memory> constructMemory() async {
+  Future uploadMemory() async {
     String data = widget.initialMemory.data;
 
-    if (widget.initialMemory.type == MemoryType.Image) {
+    if (widget.initialMemory.type == MemoryType.Image ||
+        widget.initialMemory.type == MemoryType.Video) {
       data = await uploadImage(widget.initialMemory.data);
     }
 
-    return Memory(
-      type: widget.initialMemory.type,
-      memoryDate: currentDate,
-      data: data
+    Memory newMemory = Memory(
+        type: widget.initialMemory.type,
+        memoryDate: currentDate,
+        data: data
     );
-  }
 
-  void uploadMemory() async {
-    Memory newMemory = await constructMemory();
     for (var col in collections) {
-      await Firestore.instance.document("vnjogani@gmail.com!Collections").collection(col).add(newMemory.toMap());
+      await Firestore.instance.document("vnjogani_gmail_com_Collections")
+          .collection(col)
+          .add(newMemory.toMap());
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +82,13 @@ class _CreateComponentState extends State<CreateComponent> {
           onPressed: () => Navigator.pop(context)
       ),
       child: ListView(
-        children:<Widget>[Padding(
+        children: <Widget>[Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
               TextField(
-                decoration:  InputDecoration(
-                  hintText: "Pick a date"
+                decoration: InputDecoration(
+                    hintText: "Pick a date"
                 ),
                 onTap: () async {
                   var date = await showDatePicker(
@@ -96,11 +97,14 @@ class _CreateComponentState extends State<CreateComponent> {
                       firstDate: DateTime(1990, 1, 1),
                       lastDate: DateTime.now()
                   );
-                  var time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-                  var dt = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+                  var time = await showTimePicker(
+                      context: context, initialTime: TimeOfDay.now());
+                  var dt = DateTime(
+                      date.year, date.month, date.day, time.hour, time.minute);
                   setState(() {
                     currentDate = dt;
-                    txt.text = "${dt.year}-${zeroPad(dt.month)}-${zeroPad(dt.day)} ${zeroPad(dt.hour)}:${zeroPad(dt.minute)}";
+                    txt.text = "${dt.year}-${zeroPad(dt.month)}-${zeroPad(
+                        dt.day)} ${zeroPad(dt.hour)}:${zeroPad(dt.minute)}";
                   });
                 },
                 controller: txt,
@@ -160,15 +164,21 @@ class _CreateComponentState extends State<CreateComponent> {
                     ],
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
-                ), onPressed: () {
-                  uploadMemory();
-              },
+                ),
+                onPressed: () async {
+                  await uploadMemory();
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text("Memory uploaded"),
+                  ));
+                  Navigator.pop(context);
+                },
               )
 
             ],
             crossAxisAlignment: CrossAxisAlignment.start,
           ),
-        )],
+        )
+        ],
       ),
     );
   }
