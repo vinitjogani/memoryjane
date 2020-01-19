@@ -58,16 +58,17 @@ class _CreateComponentState extends State<CreateComponent> {
       data = await uploadImage(widget.initialMemory.data);
     }
 
-    Memory newMemory = Memory(
+    Map<String, dynamic> newMemory = Memory(
         type: widget.initialMemory.type,
         memoryDate: currentDate,
         data: data
-    );
+    ).toMap();
 
     for (var col in collections) {
-      await Firestore.instance.document("vnjogani_gmail_com_Collections")
+      print(col);
+      await Firestore.instance.collection("vnjogani@gmail.com").document("Collections")
           .collection(col)
-          .add(newMemory.toMap());
+          .add(newMemory);
     }
   }
 
@@ -167,9 +168,6 @@ class _CreateComponentState extends State<CreateComponent> {
                 ),
                 onPressed: () async {
                   await uploadMemory();
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text("Memory uploaded"),
-                  ));
                   Navigator.pop(context);
                 },
               )
