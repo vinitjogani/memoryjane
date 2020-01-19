@@ -41,9 +41,14 @@ class _CreateTextMemoryComponentState extends State<CreateTextMemoryComponent> {
 
   Future uploadTextMemory() async {
     if (collections.length == 0) return;
+    var memType = MemoryType.Text;
+    
+    if(textMemory.startsWith("http") || textMemory.startsWith("www")) {
+      memType = MemoryType.Website;
+    }
 
     Map<String, dynamic> newMemory = Memory(
-        type: MemoryType.Text,
+        type: memType,
         memoryDate: currentDate,
         data: textMemory
     ).toMap();
