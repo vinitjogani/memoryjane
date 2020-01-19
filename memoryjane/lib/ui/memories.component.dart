@@ -84,7 +84,9 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
 
     for(var doc in colDocs.documents) {
       var memoryDocs = await endpoint.collection(doc.documentID).getDocuments();
-      var memories = memoryDocs.documents.map((x) => Memory.fromMap(x.data, x.documentID)).toList();
+      var memories = memoryDocs.documents.map(
+        (x) => Memory.fromMap(x.data, x.documentID, doc.documentID)
+      ).toList();
       for (var mem in memories) {
         var key = mem.getMonthKey();
         if (!memoryMonthMap.containsKey(key))

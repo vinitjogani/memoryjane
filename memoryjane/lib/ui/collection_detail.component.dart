@@ -45,10 +45,11 @@ class _CollectionDetailComponentState extends State<CollectionDetailComponent> {
   }
 
   Future delete(Memory item) async {
+    var colName = item.collectionName != null? item.collectionName : widget.collection.name;
     widget.collection.memories.remove(item);
     print("Removing ${item.id} from ${widget.collection.name}");
     await Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
-      .document('Collections').collection(widget.collection.name.toLowerCase())
+      .document('Collections').collection(colName.toLowerCase())
       .document(item.id).delete();
   }
 

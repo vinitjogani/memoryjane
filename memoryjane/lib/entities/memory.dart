@@ -17,8 +17,9 @@ class Memory {
   final String id;
   final DateTime memoryDate;
   final String data;
+  final String collectionName;
 
-  Memory({this.type, this.id, this.data, this.memoryDate});
+  Memory({this.type, this.id, this.data, this.memoryDate, this.collectionName});
 
   String getDateString() {
     var month = months[memoryDate.month - 1];
@@ -29,12 +30,13 @@ class Memory {
     return "$hour:$minute on $month $day, ${memoryDate.year}";
   }
 
-  static Memory fromMap(Map<String, dynamic> json, var id) {
+  static Memory fromMap(Map<String, dynamic> json, var id, var colId) {
     return Memory(
       type: MemoryType.values[json['type']],
       id: id,
       data: json['data'],
-      memoryDate: DateTime.parse(json['memoryDate'])
+      memoryDate: DateTime.parse(json['memoryDate']),
+      collectionName: colId
     );
   }
 
