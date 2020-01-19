@@ -8,10 +8,33 @@ import 'package:memoryjane/signin_auth.dart';
 import 'package:memoryjane/sign_in.dart';
 import 'package:memoryjane/ui/layout.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 // TODO: signin_auth has name and email variable from signing in. Can be used for database updates and UI customization
 //String name;
 //String email;
+
+
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  LifecycleEventHandler({this.resumeCallBack});
+
+  final AsyncCallback resumeCallBack;
+
+  @override
+  Future<Null> didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.resumed:
+        await resumeCallBack();
+        break;
+    }
+  }
+}
 
 
 class MemoriesComponent extends StatefulWidget {
@@ -28,9 +51,13 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   void mediaCallback(List<SharedMediaFile> value) {
     if (value != null && value.length  > 0) {
       for (var m in value) {
+        MemoryType type = MemoryType.Image;
+        if (m.path.endsWith('.mp4') || m.path.endsWith('.mpeg')) {
+          type = MemoryType.Video;
+        }
         Navigator.push(context, MaterialPageRoute(
             builder: (context) =>
-                CreateComponent(Memory(data: m.path, type: MemoryType.Image))
+                CreateComponent(Memory(data: m.path, type: type))
         ));
       }
     }
@@ -101,6 +128,8 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     ReceiveSharingIntent.getInitialText().then(textCallback);
 
     downloadCollections();
+
+    WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: downloadCollections));
   }
 
   void signOut() {
@@ -110,7 +139,6 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
 
   @override
   Widget build(BuildContext context) {
-    downloadCollections();
     return LayoutComponent(
       child: ListView(
         children: <Widget>[
