@@ -7,17 +7,21 @@ class Collection {
   String coverImageUrl;
   final List<Memory> memories;
 
-  Collection({this.id, this.name, this.coverImageUrl, this.memories});
+  Collection({this.id, this.name, this.coverImageUrl, this.memories}) {
+    if (coverImageUrl == null) {
+      setCoverImage();
+    }
+  }
+
+  void setCoverImage() {
+    coverImageUrl = getRandomImageUrl();
+  }
 
   String getCoverImage() {
-    if (coverImageUrl == null || coverImageUrl == "") {
-      return getRandomImageUrl();
-    }
-
     Memory imageMemory = getLatestImageMemory();
 
-    if (imageMemory == null) {
-      return getRandomImageUrl();
+    if (imageMemory != null) {
+      coverImageUrl = imageMemory.data;
     }
 
     return coverImageUrl;
