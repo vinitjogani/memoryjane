@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:link_previewer/link_previewer.dart';
 import 'package:memoryjane/entities/memory.dart';
+import 'package:memoryjane/ui/video.component.dart';
+import 'package:video_player/video_player.dart';
 
 
 Widget displayMemory(Memory memory) {
@@ -18,6 +20,9 @@ Widget displayMemory(Memory memory) {
       link: memory.data,
       direction: ContentDirection.vertical,
     );
+  }
+  else if (memory.type == MemoryType.Video) {
+    return VideoComponent(memory.data);
   }
   else if (memory.type == MemoryType.Image) {
     if (memory.data.startsWith('http'))

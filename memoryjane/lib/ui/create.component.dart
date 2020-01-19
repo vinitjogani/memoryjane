@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/memory.dart';
@@ -39,8 +40,9 @@ class _CreateComponentState extends State<CreateComponent> {
 
   Future<String> uploadImage(String path, String col, String documentID) async {
     print("Uploading");
+    var email = (await FirebaseAuth.instance.currentUser()).email;
     final StorageReference storageReference = FirebaseStorage().ref()
-        .child('vnjogani@gmail.com/$col/$documentID');
+        .child('$email/$col/$documentID');
     final StorageUploadTask uploadTask = storageReference.putFile(
         File.fromUri(Uri(path: path)));
     await uploadTask.onComplete;
@@ -60,7 +62,7 @@ class _CreateComponentState extends State<CreateComponent> {
         data: widget.initialMemory.data
     ).toMap();
 
-    var colListEndpoint = Firestore.instance.collection("vnjogani@gmail.com")
+    var colListEndpoint = Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
         .document("Collections")
         .collection('List');
 
@@ -69,7 +71,7 @@ class _CreateComponentState extends State<CreateComponent> {
         'modifiedOn': DateTime.now().toIso8601String()
       });
 
-      var endpoint = Firestore.instance.collection("vnjogani@gmail.com")
+      var endpoint = Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
           .document("Collections")
           .collection(col.toLowerCase());
       var res = await endpoint.add(newMemory);
