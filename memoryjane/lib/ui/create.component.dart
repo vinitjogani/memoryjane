@@ -53,6 +53,9 @@ class _CreateComponentState extends State<CreateComponent> {
   }
 
   Future uploadMemory() async {
+
+    if (collections.length == 0) return;
+
     String path = widget.initialMemory.data;
 
 

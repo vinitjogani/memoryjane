@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/memory.dart';
@@ -39,6 +40,7 @@ class _CreateTextMemoryComponentState extends State<CreateTextMemoryComponent> {
   }
 
   Future uploadTextMemory() async {
+    if (collections.length == 0) return;
 
     Map<String, dynamic> newMemory = Memory(
         type: MemoryType.Text,
@@ -46,7 +48,7 @@ class _CreateTextMemoryComponentState extends State<CreateTextMemoryComponent> {
         data: textMemory
     ).toMap();
 
-    var colListEndpoint = Firestore.instance.collection("vnjogani@gmail.com")
+    var colListEndpoint = Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
         .document("Collections")
         .collection('List');
 
@@ -55,7 +57,7 @@ class _CreateTextMemoryComponentState extends State<CreateTextMemoryComponent> {
         'modifiedOn': DateTime.now().toIso8601String()
       });
 
-      var endpoint = Firestore.instance.collection("vnjogani@gmail.com")
+      var endpoint = Firestore.instance.collection((await FirebaseAuth.instance.currentUser()).email)
           .document("Collections")
           .collection(col.toLowerCase());
       await endpoint.add(newMemory);

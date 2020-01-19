@@ -26,7 +26,7 @@ Widget displayMemory(Memory memory) {
   }
   else if (memory.type == MemoryType.Image) {
     if (memory.data.startsWith('http'))
-      return Image.network(memory.data);
+      return Image.network(memory.data, width: double.infinity, fit: BoxFit.contain,);
     else
       return Image.file(File.fromUri(Uri(path: memory.data)));
   }

@@ -63,7 +63,7 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
         Navigator.push(context, MaterialPageRoute(
             builder: (context) =>
                 CreateComponent(Memory(data: m.path, type: type))
-        ));
+        )).then((_) => downloadCollections());
       }
     }
   }
@@ -167,11 +167,13 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {return LoginPage();}), ModalRoute.withName('/'));
   }
 
-  void createTextMemory() {
-    Navigator.push(context, MaterialPageRoute(
+  void createTextMemory() async {
+    await Navigator.push(context, MaterialPageRoute(
         builder: (context) =>
             CreateTextMemoryComponent()
     ));
+
+    await downloadCollections();
   }
 
   @override
