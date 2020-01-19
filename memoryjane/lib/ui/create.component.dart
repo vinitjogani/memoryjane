@@ -37,10 +37,10 @@ class _CreateComponentState extends State<CreateComponent> {
     txt = TextEditingController();
   }
 
-  Future<String> uploadImage(String path) async {
+  Future<String> uploadImage(String path, String col, String documentID) async {
     print("Uploading");
-    final StorageReference storageReference = FirebaseStorage().ref().child(
-        "Test");
+    final StorageReference storageReference = FirebaseStorage().ref()
+        .child('vnjogani@gmail.com/$col/$documentID');
     final StorageUploadTask uploadTask = storageReference.putFile(
         File.fromUri(Uri(path: path)));
     await uploadTask.onComplete;
@@ -51,31 +51,34 @@ class _CreateComponentState extends State<CreateComponent> {
   }
 
   Future uploadMemory() async {
-    String data = widget.initialMemory.data;
+    String path = widget.initialMemory.data;
 
-    if (widget.initialMemory.type == MemoryType.Image ||
-        widget.initialMemory.type == MemoryType.Video) {
-      data = await uploadImage(widget.initialMemory.data);
-    }
 
     Map<String, dynamic> newMemory = Memory(
         type: widget.initialMemory.type,
         memoryDate: currentDate,
-        data: data
+        data: widget.initialMemory.data
     ).toMap();
 
     for (var col in collections) {
-      print(col);
-      await Firestore.instance.collection("vnjogani@gmail.com").document("Collections")
-          .collection(col)
-          .add(newMemory);
+      var endpoint = Firestore.instance.collection("vnjogani@gmail.com")
+          .document("Collections")
+          .collection(col);
+      var res = await endpoint.add(newMemory);
+
+
+      if (widget.initialMemory.type == MemoryType.Image ||
+          widget.initialMemory.type == MemoryType.Video) {
+        var newPath = await uploadImage(path, col, res.documentID);
+        endpoint.document(res.documentID).setData({'data': newPath}, merge: true);
+      }
+
     }
   }
 
 
   @override
   Widget build(BuildContext context) {
-    print(widget.initialMemory.data);
     return LayoutComponent(
       title: "Create",
       action: IconButton(
