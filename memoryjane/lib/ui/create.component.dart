@@ -22,9 +22,40 @@ class CreateComponent extends StatefulWidget {
 
 class _CreateComponentState extends State<CreateComponent> {
 
+  TextEditingController txt;
   final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
+  DateTime currentDate = DateTime.now();
   List<String> collections = [];
   List<String> allCollections = ['Sriram', 'Steven'];
+
+  @override
+  void initState() {
+    super.initState();
+    txt = TextEditingController();
+  }
+
+  String uploadImage(String path) {
+    // TODO: Upload image and return url
+    return '<STORAGE URL>';
+  }
+
+  Memory constructMemory() {
+    String data = widget.initialMemory.data;
+
+    if (widget.initialMemory.type == MemoryType.Image) {
+      data = uploadImage(widget.initialMemory.data);
+    }
+
+    return Memory(
+      type: widget.initialMemory.type,
+      memoryDate: currentDate,
+      data: data
+    );
+  }
+
+  void uploadMemory(List<String> collections) {
+    Memory newMemory = constructMemory();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,27 +71,26 @@ class _CreateComponentState extends State<CreateComponent> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              Text("Pick a date"),
-              DateTimeField(
-                format: format,
-                onShowPicker: (context, currentValue) async {
-                  final date = await showDatePicker(
+              TextField(
+                decoration:  InputDecoration(
+                  hintText: "Pick a date"
+                ),
+                onTap: () async {
+                  var date = await showDatePicker(
                       context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100)
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1990, 1, 1),
+                      lastDate: DateTime.now()
                   );
-                  if (date != null) {
-                    final time = await showTimePicker(
-                      context: context,
-                      initialTime:
-                      TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-                    );
-                    return DateTimeField.combine(date, time);
-                  } else {
-                    return currentValue;
-                  }
+                  var time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+                  var dt = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+                  setState(() {
+                    currentDate = dt;
+                    txt.text = "${dt.year}-${zeroPad(dt.month)}-${zeroPad(dt.day)} ${zeroPad(dt.hour)}:${zeroPad(dt.minute)}";
+                  });
                 },
+                controller: txt,
+                readOnly: true,
               ),
               SizedBox(height: 20,),
               Center(child: displayMemory(widget.initialMemory)),
@@ -100,7 +130,25 @@ class _CreateComponentState extends State<CreateComponent> {
                     },
                   );
                 },
+              ),
+              SizedBox(height: 20,),
+              RaisedButton(
+                color: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      Icon(Icons.done, color: Colors.white,)
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ), onPressed: () {},
               )
+
             ],
             crossAxisAlignment: CrossAxisAlignment.start,
           ),
