@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/ui/layout.dart';
@@ -34,16 +38,32 @@ class _CreateComponentState extends State<CreateComponent> {
     txt = TextEditingController();
   }
 
-  String uploadImage(String path) {
+  Future<String> uploadImage(String path) async {
+    print("Uploading");
     // TODO: Upload image and return url
-    return '<STORAGE URL>';
+    final StorageReference storageReference = FirebaseStorage().ref().child("Test");
+    final StorageUploadTask uploadTask = storageReference.putFile(File.fromUri(Uri(path: path)));
+    await uploadTask.onComplete;
+
+    String imageURL = await storageReference.getDownloadURL();
+    print(imageURL);
+
+//    DocumentReference doc = await Firestore.instance.collection("Sri").document("doc1");
+//    print((await doc.get()).data);
+    await Firestore.instance.collection("Sri").document("doc1").setData({
+      "Title": "Mem1",
+      "Date": "1/1/11/",
+      "imgURL": imageURL
+    });
+    return "fuck you";
   }
 
   Memory constructMemory() {
     String data = widget.initialMemory.data;
 
     if (widget.initialMemory.type == MemoryType.Image) {
-      data = uploadImage(widget.initialMemory.data);
+      //TODO: need to get Future String
+      uploadImage(widget.initialMemory.data);
     }
 
     return Memory(
@@ -53,7 +73,7 @@ class _CreateComponentState extends State<CreateComponent> {
     );
   }
 
-  void uploadMemory(List<String> collections) {
+  void uploadMemory() {
     Memory newMemory = constructMemory();
   }
 
@@ -146,7 +166,9 @@ class _CreateComponentState extends State<CreateComponent> {
                     ],
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
-                ), onPressed: () {},
+                ), onPressed: () {
+                  uploadMemory();
+              },
               )
 
             ],
