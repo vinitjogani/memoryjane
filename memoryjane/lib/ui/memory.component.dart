@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:link_previewer/link_previewer.dart';
 import 'package:memoryjane/entities/memory.dart';
 
 
@@ -14,10 +15,9 @@ Widget displayMemory(Memory memory) {
     );
   }
   else if (memory.type == MemoryType.Website) {
-    return Text(
-      memory.data,
-      softWrap: true,
-      style: TextStyle(fontSize: 17),
+    return LinkPreviewer(
+      link: memory.data,
+      direction: ContentDirection.vertical,
     );
   }
   else if (memory.type == MemoryType.Image) {
