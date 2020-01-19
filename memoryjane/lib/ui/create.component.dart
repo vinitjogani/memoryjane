@@ -47,24 +47,14 @@ class _CreateComponentState extends State<CreateComponent> {
     await uploadTask.onComplete;
 
     String imageURL = await storageReference.getDownloadURL();
-    print(imageURL);
-
-//    DocumentReference doc = await Firestore.instance.collection("Sri").document("doc1");
-//    print((await doc.get()).data);
-    await Firestore.instance.collection("Sri").document("doc1").setData({
-      "Title": "Mem1",
-      "Date": "1/1/11/",
-      "imgURL": imageURL
-    });
-    return "fuck you";
+    return imageURL;
   }
 
-  Memory constructMemory() {
+  Future<Memory> constructMemory() async {
     String data = widget.initialMemory.data;
 
     if (widget.initialMemory.type == MemoryType.Image) {
-      //TODO: need to get Future String
-      uploadImage(widget.initialMemory.data);
+      data = await uploadImage(widget.initialMemory.data);
     }
 
     return Memory(
@@ -74,8 +64,11 @@ class _CreateComponentState extends State<CreateComponent> {
     );
   }
 
-  void uploadMemory() {
-    Memory newMemory = constructMemory();
+  void uploadMemory() async {
+    Memory newMemory = await constructMemory();
+    for (var col in collections) {
+      await Firestore.instance.document("vnjogani@gmail.com!Collections").collection(col).add(newMemory.toMap());
+    }
   }
 
   @override

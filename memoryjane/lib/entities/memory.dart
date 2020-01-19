@@ -28,4 +28,22 @@ class Memory {
 
     return "$hour:$minute on $month $day, ${memoryDate.year}";
   }
+
+  static Memory fromMap(Map<String, dynamic> json, var id) {
+    return Memory(
+      type: MemoryType.values[json['type']],
+      id: id,
+      data: json['data'],
+      memoryDate: DateTime.parse(json['memoryDate'])
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'type': MemoryType.values.indexOf(type),
+      'data': data,
+      'memoryDate': memoryDate.toIso8601String()
+    };
+  }
+
 }
