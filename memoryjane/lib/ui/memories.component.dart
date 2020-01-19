@@ -73,8 +73,14 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   void textCallback(String value) async {
     if (value == null) return;
 
+    var memType = MemoryType.Text;
+
+    if(value.startsWith("http") || value.startsWith("www")) {
+      memType = MemoryType.Website;
+    }
+
     Navigator.push(context, MaterialPageRoute(
-      builder: (context) => CreateComponent(Memory(data: value, type: MemoryType.Text))
+      builder: (context) => CreateComponent(Memory(data: value, type: memType))
     ));
   }
 

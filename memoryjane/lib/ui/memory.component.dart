@@ -13,6 +13,13 @@ Widget displayMemory(Memory memory) {
       style: TextStyle(fontSize: 17),
     );
   }
+  else if (memory.type == MemoryType.Website) {
+    return Text(
+      memory.data,
+      softWrap: true,
+      style: TextStyle(fontSize: 17),
+    );
+  }
   else if (memory.type == MemoryType.Image) {
     if (memory.data.startsWith('http'))
       return Image.network(memory.data);
