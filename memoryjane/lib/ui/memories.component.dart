@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +71,8 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   }
 
   Future downloadCollections() async {
+    if ((await FirebaseAuth.instance.currentUser()) == null) return;
+
     print("Downloading...");
     
     Map<String, List<Memory>> memoryMonthMap = {};
@@ -121,8 +125,10 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
   Future<FirebaseUser> _handleSignIn() async {
     var u = await _auth.currentUser();
 
-    if (u == null) {
+    while (u == null) {
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) continue;
+
       final GoogleSignInAuthentication googleAuth = await googleUser
           .authentication;
 
@@ -132,7 +138,6 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
       );
 
       u = (await _auth.signInWithCredential(credential)).user;
-      print("signed in " + u.displayName);
     }
 
     return u;
@@ -162,9 +167,15 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
     });
   }
 
-  void signOut() {
+  void signOut() async {
     signOutGoogle();
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {return LoginPage();}), ModalRoute.withName('/'));
+    await FirebaseAuth.instance.signOut();
+
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) {
+          return LoginPage();
+        }), ModalRoute.withName('/')
+    );
   }
 
   void createTextMemory() async {
