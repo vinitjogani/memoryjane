@@ -2,15 +2,20 @@ import 'package:memoryjane/entities/memory.dart';
 import 'package:memoryjane/utilities.dart';
 
 class Collection {
-  final String id;
-  final String name;
+  String name;
   String coverImageUrl;
   final List<Memory> memories;
 
-  Collection({this.id, this.name, this.coverImageUrl, this.memories}) {
+  Collection({this.name, this.coverImageUrl, this.memories}) {
     if (coverImageUrl == null) {
       setCoverImage();
     }
+    if (name.length > 0) {
+      name = name[0].toUpperCase() + name.substring(1).toLowerCase();
+    }
+    memories.sort((m1, m2) {
+      return -m1.memoryDate.compareTo(m2.memoryDate);
+    });
   }
 
   void setCoverImage() {

@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/entities/memory.dart';
@@ -23,19 +22,8 @@ class MemoriesComponent extends StatefulWidget {
 
 class _MemoriesComponentState extends State<MemoriesComponent> {
 
-  final List<Collection> dummyCollections = [
-    Collection(
-        name: "Sriram",
-        coverImageUrl: "https://avatars0.githubusercontent.com/u/15956660?s=460&v=4",
-        memories: [
-          Memory(type: MemoryType.Text, data: "Hello, world!", id: "123", memoryDate: DateTime(2020, 1, 7, 3, 33))
-        ]
-    ),
-    Collection(
-      name: "Steven",
-      memories: []
-    ),
-  ];
+  List<Collection> personCollections = [];
+  List<Collection> timeCollections = [];
 
   void mediaCallback(List<SharedMediaFile> value) {
     if (value != null && value.length  > 0) {
@@ -45,13 +33,45 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
                 CreateComponent(Memory(data: m.path, type: MemoryType.Image))
         ));
       }
-      print("Shared:" + (value?.map((f)=> f.path)?.join(",") ?? ""));
     }
+  }
+
+  void downloadCollections() async {
+    Map<String, List<Memory>> memoryMonthMap = {};
+    List<Collection> personCols = [], timeCols = [];
+    var colDocs = await Firestore.instance.collection("vnjogani@gmail.com")
+        .document('Collections').collection('List').getDocuments();
+    var endpoint = Firestore.instance.collection("vnjogani@gmail.com")
+        .document('Collections');
+
+    for(var doc in colDocs.documents) {
+      var memoryDocs = await endpoint.collection(doc.documentID).getDocuments();
+      var memories = memoryDocs.documents.map((x) => Memory.fromMap(x.data, x.documentID)).toList();
+      for (var mem in memories) {
+        var key = mem.getMonthKey();
+        if (!memoryMonthMap.containsKey(key))
+          memoryMonthMap[key] = [];
+        memoryMonthMap[key].add(mem);
+      }
+      personCols.add(Collection(name: doc.documentID, memories: memories));
+    }
+
+
+    for (var key in memoryMonthMap.keys) {
+      timeCols.add(Collection(name: key, memories: memoryMonthMap[key]));
+    }
+
+    setState(() {
+      personCollections.clear();
+      personCollections.addAll(personCols.where((x) => x.memories.length > 0).toList());
+      timeCollections.clear();
+      timeCollections.addAll(timeCols);
+    });
+
   }
 
   void textCallback(String value) async {
     if (value == null) return;
-    print(value);
 
     Navigator.push(context, MaterialPageRoute(
       builder: (context) => CreateComponent(Memory(data: value, type: MemoryType.Text))
@@ -73,6 +93,8 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then(textCallback);
+
+    downloadCollections();
   }
 
   void signOut() {
@@ -82,12 +104,12 @@ class _MemoriesComponentState extends State<MemoriesComponent> {
 
   @override
   Widget build(BuildContext context) {
+    downloadCollections();
     return LayoutComponent(
       child: ListView(
         children: <Widget>[
-          GroupComponent('PEOPLE', dummyCollections),
-          GroupComponent('PLACES', dummyCollections),
-          GroupComponent('TIME', dummyCollections),
+          GroupComponent('PEOPLE', personCollections),
+          GroupComponent('TIME', timeCollections),
           SizedBox(height: 40,)
         ],
         padding: EdgeInsets.all(0),

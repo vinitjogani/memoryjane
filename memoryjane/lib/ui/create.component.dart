@@ -60,12 +60,19 @@ class _CreateComponentState extends State<CreateComponent> {
         data: widget.initialMemory.data
     ).toMap();
 
+    var colListEndpoint = Firestore.instance.collection("vnjogani@gmail.com")
+        .document("Collections")
+        .collection('List');
+
     for (var col in collections) {
+      await colListEndpoint.document(col).setData({
+        'modifiedOn': DateTime.now().toIso8601String()
+      });
+
       var endpoint = Firestore.instance.collection("vnjogani@gmail.com")
           .document("Collections")
-          .collection(col);
+          .collection(col.toLowerCase());
       var res = await endpoint.add(newMemory);
-
 
       if (widget.initialMemory.type == MemoryType.Image ||
           widget.initialMemory.type == MemoryType.Video) {

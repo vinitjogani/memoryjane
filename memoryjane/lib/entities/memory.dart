@@ -46,4 +46,8 @@ class Memory {
     };
   }
 
+  String getMonthKey() {
+    return months[memoryDate.month-1] + " '${memoryDate.year.toString().substring(2)}";
+  }
+
 }

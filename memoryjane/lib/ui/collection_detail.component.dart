@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:memoryjane/entities/collection.dart';
 import 'package:memoryjane/entities/memory.dart';
@@ -42,8 +43,12 @@ class _CollectionDetailComponentState extends State<CollectionDetailComponent> {
     return confirm;
   }
 
-  void delete(Memory item) {
-
+  Future delete(Memory item) async {
+    widget.collection.memories.remove(item);
+    print("Removing ${item.id} from ${widget.collection.name}");
+    await Firestore.instance.collection('vnjogani@gmail.com')
+      .document('Collections').collection(widget.collection.name.toLowerCase())
+      .document(item.id).delete();
   }
 
   Widget makeDismissible(MemoryComponent memory) {
@@ -51,7 +56,7 @@ class _CollectionDetailComponentState extends State<CollectionDetailComponent> {
       background: Container(color: Colors.red),
       child: memory,
       key: Key(memory.memory.id),
-      onDismissed: (_) => delete(memory.memory),
+      onDismissed: (_) async => await delete(memory.memory),
       confirmDismiss: confirmDelete,
       direction: DismissDirection.endToStart,
     );
