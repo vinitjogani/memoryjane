@@ -39,8 +39,8 @@ class _CreateTextMemoryComponentState extends State<CreateTextMemoryComponent> {
     txt = TextEditingController();
   }
 
-  Future uploadTextMemory() async {
-    if (collections.length == 0) return;
+  Future<bool> uploadTextMemory() async {
+    if (collections.length == 0) return false;
 
     Map<String, dynamic> newMemory = Memory(
         type: MemoryType.Text,
@@ -61,8 +61,9 @@ class _CreateTextMemoryComponentState extends State<CreateTextMemoryComponent> {
           .document("Collections")
           .collection(col.toLowerCase());
       await endpoint.add(newMemory);
-
     }
+
+    return true;
   }
 
 
@@ -167,8 +168,8 @@ class _CreateTextMemoryComponentState extends State<CreateTextMemoryComponent> {
                   ),
                 ),
                 onPressed: () async {
-                  await uploadTextMemory();
-                  Navigator.pop(context);
+                  var result = await uploadTextMemory();
+                  if (result) Navigator.pop(context);
                 },
               )
 

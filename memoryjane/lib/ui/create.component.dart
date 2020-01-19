@@ -52,9 +52,9 @@ class _CreateComponentState extends State<CreateComponent> {
     return imageURL;
   }
 
-  Future uploadMemory() async {
+  Future<bool> uploadMemory() async {
 
-    if (collections.length == 0) return;
+    if (collections.length == 0) return false;
 
     String path = widget.initialMemory.data;
 
@@ -84,8 +84,9 @@ class _CreateComponentState extends State<CreateComponent> {
         var newPath = await uploadImage(path, col, res.documentID);
         endpoint.document(res.documentID).setData({'data': newPath}, merge: true);
       }
-
     }
+
+    return true;
   }
 
 
@@ -182,8 +183,8 @@ class _CreateComponentState extends State<CreateComponent> {
                   ),
                 ),
                 onPressed: () async {
-                  await uploadMemory();
-                  Navigator.pop(context);
+                  var result = await uploadMemory();
+                  if (result) Navigator.pop(context);
                 },
               )
 
